@@ -249,6 +249,14 @@ async function run() {
       res.send(toyData);
     });
 
+    // get the toys which price grater then 1000
+    app.get("/getter", async (req, res) => {
+      const toyData = await toysCollection
+        .find({ price: { $gt: 1000 } })
+        .toArray();
+      res.send(toyData);
+    });
+
     await client.connect();
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
