@@ -257,6 +257,22 @@ async function run() {
       res.send(toyData);
     });
 
+    // get the toys which price lesser then 1000
+    app.get("/lesser", async (req, res) => {
+      const toyData = await toysCollection
+        .find({ price: { $lt: 1000 } })
+        .toArray();
+      res.send(toyData);
+    });
+
+    // get the toys which price lesser then or equal to 220 (we can have the toys which price is grater then or equal 220 by using (gte))
+    app.get("/lesserOrEqual", async (req, res) => {
+      const toyData = await toysCollection
+        .find({ price: { $lte: 220 } })
+        .toArray();
+      res.send(toyData);
+    });
+
     await client.connect();
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
