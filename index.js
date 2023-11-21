@@ -213,7 +213,7 @@ async function run() {
           .find({ ToyName: "Badminton toy" })
           .project({
             _id: 0,
-            image : 1,
+            image: 1,
             ToyName: 1,
             sellerName: 1,
             sellerEmail: 1,
@@ -229,6 +229,17 @@ async function run() {
         console.error("Error fetching data:", error);
         res.status(500).send("Internal Server Error");
       }
+    });
+
+    // Complex Query Commands
+
+    // equal to command
+
+    app.get("/equal", async (req, res) => {
+      const toyData = await toysCollection
+        .find({ category: { $eq: "football" } })
+        .toArray();
+      res.send(toyData);
     });
 
     await client.connect();
