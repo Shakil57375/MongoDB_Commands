@@ -40,10 +40,19 @@ async function run() {
       const toyData = await toysCollection.find().toArray();
       res.send(toyData);
     });
-    
+
     // get tow Data by using limit
     app.get("/limit", async (req, res) => {
       const toyData = await toysCollection.find().limit(2).toArray();
+      res.send(toyData);
+    });
+
+    // get data by sorting ascending
+    app.get("/sort", async (req, res) => {
+      const toyData = await toysCollection
+        .find()
+        .sort({ category: 1 })
+        .toArray();
       res.send(toyData);
     });
 
