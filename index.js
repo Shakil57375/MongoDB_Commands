@@ -48,10 +48,11 @@ async function run() {
     });
 
     // get data by sorting descending by category
+    // we can sort multiple item at a time.
     app.get("/sortDescending", async (req, res) => {
       const toyData = await toysCollection
         .find()
-        .sort({ category: -1 })
+        .sort({ ToyName: -1, category: -1 })
         .toArray();
       res.send(toyData);
     });
@@ -99,6 +100,13 @@ async function run() {
         console.error("Error fetching and sorting data:", error);
         res.status(500).send("Internal Server Error");
       }
+    });
+
+    // skip object
+
+    app.get("/skip", async (req, res) => {
+      const toyData = await toysCollection.find().limit(3).skip(2).toArray();
+      res.send(toyData);
     });
 
     await client.connect();
