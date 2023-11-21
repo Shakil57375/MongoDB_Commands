@@ -205,6 +205,32 @@ async function run() {
       }
     });
 
+    // get specific elements of a document. write the elements you want or don't want in the second parameter.
+
+    app.get("/findElements", async (req, res) => {
+      try {
+        const toyData = await toysCollection
+          .find({ ToyName: "Badminton toy" })
+          .project({
+            _id: 0,
+            image : 1,
+            ToyName: 1,
+            sellerName: 1,
+            sellerEmail: 1,
+            category: 1,
+            rating: 1,
+            quantity: 1,
+            description: 1,
+          })
+          .toArray();
+
+        res.send(toyData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        res.status(500).send("Internal Server Error");
+      }
+    });
+
     await client.connect();
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
