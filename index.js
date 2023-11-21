@@ -109,6 +109,24 @@ async function run() {
       res.send(toyData);
     });
 
+    // find by specific category or methods of conditions.
+    // in this case find all toy which category is football.(find the football toys)
+    app.get("/findFootball", async (req, res) => {
+      const toyData = await toysCollection
+        .find({ category: "football" })
+        .toArray();
+      res.send(toyData);
+    });
+
+    // find by specific category or methods of conditions.
+    // in this case we will get all the object which name is Badminton toy.
+    app.get("/findByName", async (req, res) => {
+      const toyData = await toysCollection
+        .find({ ToyName: "Badminton toy" })
+        .toArray();
+      res.send(toyData);
+    });
+
     await client.connect();
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
