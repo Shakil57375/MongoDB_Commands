@@ -127,6 +127,84 @@ async function run() {
       res.send(toyData);
     });
 
+    // find by specific category or methods of conditions.
+    // in this case we will get all the object which price is 220
+    /* app.get("/findByPrice", async (req, res) => {
+      const toyData = await toysCollection.find({ price: "220" }).toArray();
+      res.send(toyData);
+    }); */
+
+    // will get the prices which are less then 500
+
+    // app.get("/findByPrice", async (req, res) => {
+    //   try {
+    //     const toyData = await toysCollection
+    //       .aggregate([
+    //         {
+    //           $addFields: {
+    //             // Convert the "price" field to an integer
+    //             numericPrice: { $toInt: "$price" }
+    //           }
+    //         },
+    //         {
+    //           $match: {
+    //             // Filter based on the numeric value of "price"
+    //             numericPrice: { $lt: 500 }
+    //           }
+    //         },
+    //         {
+    //           $project: {
+    //             // Exclude the temporary field used for matching
+    //             numericPrice: 0
+    //           }
+    //         }
+    //       ])
+    //       .toArray();
+
+    //     res.send(toyData);
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //     res.status(500).send("Internal Server Error");
+    //   }
+    // });
+
+    // if you want to retrieve documents where the price is less than 1500 and the category is "football," you can combine the conditions using the $and operator.
+
+    app.get("/findByPriceAndCategory", async (req, res) => {
+      try {
+        const toyData = await toysCollection
+          .aggregate([
+            {
+              $addFields: {
+                // Convert the "price" field to an integer
+                numericPrice: { $toInt: "$price" },
+              },
+            },
+            {
+              $match: {
+                // Use $and to combine the conditions
+                $and: [
+                  { numericPrice: { $lt: 1500 } },
+                  { category: "football" },
+                ],
+              },
+            },
+            {
+              $project: {
+                // Exclude the temporary field used for matching
+                numericPrice: 0,
+              },
+            },
+          ])
+          .toArray();
+
+        res.send(toyData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        res.status(500).send("Internal Server Error");
+      }
+    });
+
     await client.connect();
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
