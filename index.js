@@ -47,13 +47,58 @@ async function run() {
       res.send(toyData);
     });
 
-    // get data by sorting ascending
-    app.get("/sort", async (req, res) => {
+    // get data by sorting descending by category
+    app.get("/sortDescending", async (req, res) => {
       const toyData = await toysCollection
         .find()
-        .sort({ category: 1 })
+        .sort({ category: -1 })
         .toArray();
       res.send(toyData);
+    });
+
+    // get data by sorting ascending by price when the value will be numbers this method will work.
+    /*  app.get("/sortAscending", async (req, res) => {
+      try {
+        const toyData = await toysCollection
+          .find()
+          .sort({ price: 1 })
+          .toArray();
+        res.send(toyData);
+      } catch (error) {
+        console.error("Error fetching and sorting data:", error);
+        res.status(500).send("Internal Server Error");
+      }
+    }); */
+
+    // when the price is a string we have to use this method.
+
+    app.get("/sortAscending", async (req, res) => {
+      try {
+        const toyData = await toysCollection
+          .aggregate([
+            {
+              $addFields: {
+                // Convert the "price" field to an integer
+                numericPrice: { $toInt: "$price" },
+              },
+            },
+            {
+              $sort: { numericPrice: 1 },
+            },
+            {
+              $project: {
+                // Exclude the temporary field used for sorting
+                numericPrice: 0,
+              },
+            },
+          ])
+          .toArray();
+
+        res.send(toyData);
+      } catch (error) {
+        console.error("Error fetching and sorting data:", error);
+        res.status(500).send("Internal Server Error");
+      }
     });
 
     await client.connect();
