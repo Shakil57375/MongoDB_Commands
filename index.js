@@ -233,11 +233,18 @@ async function run() {
 
     // Complex Query Commands
 
-    // equal to command
-
+    // equal to command 
     app.get("/equal", async (req, res) => {
       const toyData = await toysCollection
         .find({ category: { $eq: "football" } })
+        .toArray();
+      res.send(toyData);
+    });
+
+    // not equal to command
+    app.get("/notEqual", async (req, res) => {
+      const toyData = await toysCollection
+        .find({ category: { $ne: "football" } })
         .toArray();
       res.send(toyData);
     });
