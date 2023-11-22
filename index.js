@@ -340,6 +340,18 @@ async function run() {
       res.send(toyData);
     });
 
+    // and query  (generally, you don't need to use that $and very much because you can do all in one query like (//!{ price: { $gte: 200, $lte: 500 }, category: "cricket" }))
+    // if you want you can use $and to apply multiple conditions.
+
+    app.get("/andQuery", async (req, res) => {
+      const toyData = await toysCollection
+        .find({
+          $and: [{ price: { $gte: 200, $lte: 500 }, category: "football" }],
+        })
+        .toArray();
+      res.send(toyData);
+    });
+
     await client.connect();
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
