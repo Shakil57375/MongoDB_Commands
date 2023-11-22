@@ -290,6 +290,32 @@ async function run() {
       res.send(toyData);
     });
 
+    // will check if the key exist or not. here we are checking those objects which price key is not exist.
+
+    app.get("/notExist", async (req, res) => {
+      const toyData = await toysCollection
+        .find({
+          $and: [
+            { rating: { $exists: false } },
+            { price: { $exists: false } },
+            { quantity: { $exists: false } },
+          ],
+        })
+        .toArray();
+      res.send(toyData);
+    });
+
+    // above example we are using multiple conditions if you want to use one then you can follow this example
+
+    /*  app.get("/notExist", async (req, res) => {
+      const toyData = await toysCollection
+        .find({ rating: { $exists: false } } )
+        .toArray();
+      res.send(toyData);
+    }); */
+
+   
+
     await client.connect();
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
