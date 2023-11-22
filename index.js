@@ -233,7 +233,7 @@ async function run() {
 
     // Complex Query Commands
 
-    // equal to command 
+    // equal to command
     app.get("/equal", async (req, res) => {
       const toyData = await toysCollection
         .find({ category: { $eq: "football" } })
@@ -269,6 +269,15 @@ async function run() {
     app.get("/lesserOrEqual", async (req, res) => {
       const toyData = await toysCollection
         .find({ price: { $lte: 220 } })
+        .toArray();
+      res.send(toyData);
+    });
+
+    // check weather the name exist to the elements or not. Here we will check the category of football and cricket it will return the object of the category football and cricket.
+
+    app.get("/getIn", async (req, res) => {
+      const toyData = await toysCollection
+        .find({ category: { $in: ["football", "cricket"] } })
         .toArray();
       res.send(toyData);
     });
