@@ -326,7 +326,16 @@ async function run() {
 
     app.get("/lessAndGrater", async (req, res) => {
       const toyData = await toysCollection
-        .find({ price: { $gte: 200, $lte: 500 } })
+        .find({ price: { $gt: 200, $lt: 500 } })
+        .toArray();
+      res.send(toyData);
+    });
+
+    // check price less then or equal 500 and grater then or equal 200 and check the category also.
+
+    app.get("/lessAndGraterAndName", async (req, res) => {
+      const toyData = await toysCollection
+        .find({ price: { $gte: 200, $lte: 500 }, category: "cricket" })
         .toArray();
       res.send(toyData);
     });
