@@ -275,9 +275,17 @@ async function run() {
 
     // check weather the name exist to the elements or not. Here we will check the category of football and cricket it will return the object of the category football and cricket.
 
-    app.get("/getIn", async (req, res) => {
+    app.get("/In", async (req, res) => {
       const toyData = await toysCollection
         .find({ category: { $in: ["football", "cricket"] } })
+        .toArray();
+      res.send(toyData);
+    });
+    // we can also check all the data which is not exist or you can said that it will return the data which will not math the condition.  Here we will check the category of football and cricket it will return the object of the objects which category is not football and cricket.
+
+    app.get("/notIn", async (req, res) => {
+      const toyData = await toysCollection
+        .find({ category: { $nin: ["football", "cricket"] } })
         .toArray();
       res.send(toyData);
     });
