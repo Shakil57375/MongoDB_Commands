@@ -322,6 +322,15 @@ async function run() {
       res.send(toyData);
     });
 
+    // check price less then 500 and grater then 200
+
+    app.get("/lessAndGrater", async (req, res) => {
+      const toyData = await toysCollection
+        .find({ price: { $gte: 200, $lte: 500 } })
+        .toArray();
+      res.send(toyData);
+    });
+
     await client.connect();
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
