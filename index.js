@@ -314,7 +314,13 @@ async function run() {
       res.send(toyData);
     }); */
 
-   
+    // know we will check the exist method it will return those object which price is exist.
+    app.get("/exist", async (req, res) => {
+      const toyData = await toysCollection
+        .find({ price: { $exists: true } })
+        .toArray();
+      res.send(toyData);
+    });
 
     await client.connect();
     // Send a ping to confirm a successful connection
