@@ -36,7 +36,8 @@ async function run() {
       res.send(result);
     });
 
-    // read doc : https://drive.google.com/file/d/1w1SCXXWlU2b0dq9R1k6eCtUf-UGChOqU/view?usp=sharing
+    // read doc dark : https://drive.google.com/file/d/1w1SCXXWlU2b0dq9R1k6eCtUf-UGChOqU/view?usp=sharing
+    // read doc light : https://drive.google.com/file/d/1GbA42MmGAPH4xzJuZUJ6StLDQKLgN2eK/view?usp=sharing
 
     // insert
     app.post("/toys", async (req, res) => {
@@ -466,9 +467,9 @@ async function run() {
         // Use the countDocuments method to count documents in the "toysCollection"
         // that meet the specified condition (price <= 1500).
         const toyData = await toysCollection.countDocuments({
-          price: { $lte: 500 }
+          price: { $lte: 500 },
         });
-    
+
         // Send the counted data as a response.
         res.send(String(toyData)); // Convert to string to avoid the deprecation warning
       } catch (error) {
@@ -476,8 +477,16 @@ async function run() {
         res.sendStatus(500); // Internal Server Error
       }
     });
-    
-    
+
+    // update data.
+
+    app.patch("/toys", async (req, res) => {
+      const toyData = await toysCollection.updateOne(
+        { category: "football" },
+        { $set: { category: "basketball" } }
+      );
+      res.send(toyData);
+    });
 
     await client.connect();
     // Send a ping to confirm a successful connection
