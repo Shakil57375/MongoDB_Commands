@@ -363,6 +363,18 @@ async function run() {
       res.send(toyData);
     });
 
+    // ? not query
+    // will return the documents which price is grater then 1000
+
+    app.get("/notQuery", async (req, res) => {
+      const toyData = await toysCollection
+        .find({
+          price: { $not: { $lte: 1000 } },
+        })
+        .toArray();
+      res.send(toyData);
+    });
+
     await client.connect();
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
