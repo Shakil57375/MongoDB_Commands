@@ -36,6 +36,23 @@ async function run() {
       res.send(result);
     });
 
+    // insert
+    app.post("/toys", async (req, res) => {
+      try {
+        const result = await toysCollection.insertMany({
+          quality: {
+            normal: "Normal",
+            medium: "Medium",
+            premium: "Premium",
+          },
+        });
+        res.send(result);
+      } catch (error) {
+        console.error("Error inserting document:", error);
+        res.status(500).send("Internal Server Error");
+      }
+    });
+
     app.get("/toys", async (req, res) => {
       const toyData = await toysCollection.find().toArray();
       res.send(toyData);
@@ -390,6 +407,42 @@ async function run() {
       const toyData = await toysCollection
         .find({
           $expr: { $gt: ["$rating", "$quantity"] },
+        })
+        .toArray();
+      res.send(toyData);
+    });
+
+    app.get("/expression", async (req, res) => {
+      const toyData = await toysCollection
+        .find({
+          $expr: { $gt: ["$rating", "$quantity"] },
+        })
+        .toArray();
+      res.send(toyData);
+    });
+
+    // we can get an specific object by using the key and value of the specific object. (we can use the dot notation  by using an object inside an object )
+    /* 
+    as an example : 
+    quality: {
+    normal: "Normal",
+    medium: "medium",
+    premium: "premium"
+  }
+  we can access this object by using app.get("/withElement", async (req, res) => {
+      const toyData = await toysCollection
+        .find({
+          "quality.normal" : "Normal" // it will return the object.
+        })
+        .toArray();
+      res.send(toyData);
+    });
+     */
+
+    app.get("/withElement", async (req, res) => {
+      const toyData = await toysCollection
+        .find({
+          price : 1213
         })
         .toArray();
       res.send(toyData);
