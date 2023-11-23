@@ -35,6 +35,8 @@ async function run() {
       const result = await toysCollection.insertOne(toyData);
       res.send(result);
     });
+    
+    // read doc : https://drive.google.com/file/d/1w1SCXXWlU2b0dq9R1k6eCtUf-UGChOqU/view?usp=sharing
 
     // insert
     app.post("/toys", async (req, res) => {
@@ -447,6 +449,8 @@ async function run() {
         .toArray();
       res.send(toyData);
     });
+
+    
 
     await client.connect();
     // Send a ping to confirm a successful connection
