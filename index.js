@@ -346,7 +346,18 @@ async function run() {
     app.get("/andQuery", async (req, res) => {
       const toyData = await toysCollection
         .find({
-          $and: [{ price: { $gte: 200, $lte: 500 }, category: "football" }],
+          $and: [{ price: { $gte: 200, $lte: 500 } }, { category: "football" }],
+        })
+        .toArray();
+      res.send(toyData);
+    });
+
+    //* or query
+
+    app.get("/orQuery", async (req, res) => {
+      const toyData = await toysCollection
+        .find({
+          $or: [{ price: { $gte: 0, $lte: 300 } }, { category: "hokey" }],
         })
         .toArray();
       res.send(toyData);
