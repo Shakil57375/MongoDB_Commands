@@ -35,7 +35,7 @@ async function run() {
       const result = await toysCollection.insertOne(toyData);
       res.send(result);
     });
-    
+
     // read doc : https://drive.google.com/file/d/1w1SCXXWlU2b0dq9R1k6eCtUf-UGChOqU/view?usp=sharing
 
     // insert
@@ -444,12 +444,39 @@ async function run() {
     app.get("/withElement", async (req, res) => {
       const toyData = await toysCollection
         .find({
-          price : 1213
+          price: 1213,
         })
         .toArray();
       res.send(toyData);
     });
 
+    // find single data with a specific condition.
+
+    app.get("/singleData", async (req, res) => {
+      const toyData = await toysCollection.findOne({
+        price: { $lte: 1000 },
+      });
+      res.send(toyData);
+    });
+
+    // find many data is avilable with the specific conditions.
+
+    app.get("/countData", async (req, res) => {
+      try {
+        // Use the countDocuments method to count documents in the "toysCollection"
+        // that meet the specified condition (price <= 1500).
+        const toyData = await toysCollection.countDocuments({
+          price: { $lte: 500 }
+        });
+    
+        // Send the counted data as a response.
+        res.send(String(toyData)); // Convert to string to avoid the deprecation warning
+      } catch (error) {
+        console.error(error);
+        res.sendStatus(500); // Internal Server Error
+      }
+    });
+    
     
 
     await client.connect();
