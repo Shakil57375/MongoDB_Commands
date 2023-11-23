@@ -364,12 +364,21 @@ async function run() {
     });
 
     // ? not query
-    // will return the documents which price is grater then 1000
-
+    // will return the documents which price is grater then 1000 & which price key is not available
     app.get("/notQuery", async (req, res) => {
       const toyData = await toysCollection
         .find({
           price: { $not: { $lte: 1000 } },
+        })
+        .toArray();
+      res.send(toyData);
+    });
+
+    // will return the prices which is less then 1000
+    app.get("/returnPrice", async (req, res) => {
+      const toyData = await toysCollection
+        .find({
+          price: { $lte: 1000 },
         })
         .toArray();
       res.send(toyData);
