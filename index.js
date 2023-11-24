@@ -621,15 +621,18 @@ async function run() {
 
     // update many users ? watch the video from 27:30 sec (https://www.youtube.com/watch?v=ofme2o29ngU&ab_channel=WebDevSimplified)
 
-
     // delete operation
 
     app.delete("/SingleToys/:id", async (req, res) => {
-      const id = req.params.id
-      const filter = { _id: new ObjectId(id) }
-      const result = await toysCollection.deleteOne(filter)
-      res.send(result)
-    })
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const result = await toysCollection.deleteOne(filter);
+      res.send(result);
+    });
+
+    // delete many Operation.
+
+    // update many users ? watch the video from 29:30 sec (https://www.youtube.com/watch?v=ofme2o29ngU&ab_channel=WebDevSimplified)
 
     await client.connect();
     // Send a ping to confirm a successful connection
