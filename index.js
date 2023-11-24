@@ -13,7 +13,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lc40fqb.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -478,14 +478,46 @@ async function run() {
       }
     });
 
+    // get document with specific email
+
+    app.get("/myToys/:email", async (req, res) => {
+      console.log("line80", req.params?.email);
+      if (req.params?.email) {
+        const result = await toysCollection
+          .find({ sellerEmail: req.params.email })
+          .toArray();
+        return res.send(result);
+      }
+      const result = await toysCollection.find().toArray();
+      res.send(result);
+    });
+
     // update data.
 
-    app.patch("/toys", async (req, res) => {
-      const toyData = await toysCollection.updateOne(
-        { category: "football" },
-        { $set: { category: "basketball" } }
-      );
-      res.send(toyData);
+    // app.patch("/toys", async (req, res) => {
+    //   const toyData = await toysCollection.updateOne(
+    //     { category: "football" },
+    //     { $set: { category: "basketball" } }
+    //   );
+    //   res.send(toyData);
+    // });
+
+    // update
+
+    app.put("/updateToys/:id", async (req, res) => {
+      const id = req.params.id;
+      const body = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const options = {upsert : true}
+      const updatedProduct = {
+        $set: {
+          price: body.price,
+          quantity: body.quantity,
+          description: body.description,
+        },
+      };
+      const result = await toysCollection.updateOne(filter, updatedProduct, options);
+      res.send(result);
     });
 
     await client.connect();
