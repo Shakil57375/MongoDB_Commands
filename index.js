@@ -520,6 +520,21 @@ async function run() {
       res.send(result);
     });
 
+    // incrementPrice
+    app.put("/incrementPrice/:id", async (req, res) => {
+      const id = req.params.id;
+      const body = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const options = {upsert : true}
+      const updatedProduct = {
+        $inc: {
+          price: 3
+        },
+      };
+      const result = await toysCollection.updateOne(filter, updatedProduct, options);
+      res.send(result);
+    });
+
     await client.connect();
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
