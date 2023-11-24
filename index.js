@@ -581,7 +581,7 @@ async function run() {
       res.send(result);
     });
 
-    // adding key value or you can say property
+    // adding key value or you can say property (if we push anything it will add as an array.)
     app.put("/addProperty/:id", async (req, res) => {
       const id = req.params.id;
       const body = req.body;
@@ -590,6 +590,26 @@ async function run() {
       const updatedProduct = {
         $push: {
           quantity: 4,
+        },
+      };
+      const result = await toysCollection.updateOne(
+        filter,
+        updatedProduct,
+        options
+      );
+      res.send(result);
+    });
+
+
+    // pull key value or you can say property(actually, it's removing the existing element like we added/push quantity : 4 in the previous example know we are pulling or removing the value of 4)
+    app.put("/updatingProperty/:id", async (req, res) => {
+      const id = req.params.id;
+      const body = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedProduct = {
+        $pull: {
+          quantity: 4
         },
       };
       const result = await toysCollection.updateOne(
