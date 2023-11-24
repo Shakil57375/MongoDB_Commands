@@ -600,7 +600,6 @@ async function run() {
       res.send(result);
     });
 
-
     // pull key value or you can say property(actually, it's removing the existing element like we added/push quantity : 4 in the previous example know we are pulling or removing the value of 4)
     app.put("/updatingProperty/:id", async (req, res) => {
       const id = req.params.id;
@@ -609,7 +608,7 @@ async function run() {
       const options = { upsert: true };
       const updatedProduct = {
         $pull: {
-          quantity: 4
+          quantity: 4,
         },
       };
       const result = await toysCollection.updateOne(
@@ -619,6 +618,11 @@ async function run() {
       );
       res.send(result);
     });
+
+    // update many users ? watch the video from 27:30 sec (https://www.youtube.com/watch?v=ofme2o29ngU&ab_channel=WebDevSimplified)
+
+    // 
+    
 
     await client.connect();
     // Send a ping to confirm a successful connection
