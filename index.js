@@ -508,7 +508,7 @@ async function run() {
       const id = req.params.id;
       const body = req.body;
       const filter = { _id: new ObjectId(id) };
-      const options = {upsert : true}
+      const options = { upsert: true };
       const updatedProduct = {
         $set: {
           price: body.price,
@@ -516,7 +516,11 @@ async function run() {
           description: body.description,
         },
       };
-      const result = await toysCollection.updateOne(filter, updatedProduct, options);
+      const result = await toysCollection.updateOne(
+        filter,
+        updatedProduct,
+        options
+      );
       res.send(result);
     });
 
@@ -525,13 +529,36 @@ async function run() {
       const id = req.params.id;
       const body = req.body;
       const filter = { _id: new ObjectId(id) };
-      const options = {upsert : true}
+      const options = { upsert: true };
       const updatedProduct = {
         $inc: {
-          price: 3
+          price: 3,
         },
       };
-      const result = await toysCollection.updateOne(filter, updatedProduct, options);
+      const result = await toysCollection.updateOne(
+        filter,
+        updatedProduct,
+        options
+      );
+      res.send(result);
+    });
+
+    // rename key
+    app.put("/renameKey/:id", async (req, res) => {
+      const id = req.params.id;
+      const body = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedProduct = {
+        $rename: {
+          description: "details",
+        },
+      };
+      const result = await toysCollection.updateOne(
+        filter,
+        updatedProduct,
+        options
+      );
       res.send(result);
     });
 
